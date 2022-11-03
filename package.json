@@ -1,0 +1,10 @@
+{
+  "name": "test-autopublish-alias-layer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "package": "sam package --config-env common",
+    "deploy": "sam deploy --config-env common --no-fail-on-empty-changeset ",
+    "push": "npm run package && npm run deploy"
+  }
+}

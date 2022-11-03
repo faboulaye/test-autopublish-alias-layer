@@ -1,0 +1,20 @@
+version = 0.1
+
+# Common module config
+[common.package.parameters]
+s3_bucket = "test-sam-repository"
+s3_prefix = "test_alias"
+region = "eu-central-1"
+template_file = "template.yaml"
+output_template_file = "out.yml"
+
+
+[common.deploy.parameters]
+s3_bucket = "test-sam-repository"
+stack_name = "test-autopublish-alias-layer"
+s3_prefix = "test_alias"
+region = "eu-central-1"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+template_file = "out.yml"
+# parameter_overrides = 'TestEnvValue="/test/env/usage" '

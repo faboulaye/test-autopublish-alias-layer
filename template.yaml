@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+
+  # API
+  TestEnvApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: live
+
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: hello-world/
+      Handler: app.lambdaHandler
+      Runtime: nodejs12.x
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: AllAtOnce
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            RestApiId: !Ref TestEnvApi
+            Path: /hello
+            Method: get
+      Layers:
+        - !Ref TestEnvLayer
+
+  TestEnvLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: test-env-dependencies
+      Description: Dependencies for test env implementation
+      ContentUri: dependencies/
+      CompatibleRuntimes:
+        - nodejs12.x
+
+Outputs:
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${TestEnvApi}.execute-api.${AWS::Region}.amazonaws.com/live/hello/"
